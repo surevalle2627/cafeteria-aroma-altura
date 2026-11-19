@@ -1,0 +1,204 @@
+<section class="page-header">
+  <div class="container">
+    <span class="page-eyebrow">Atención Personalizada</span>
+    <h1 class="page-title">Contactos &amp; Reservas</h1>
+    <p class="page-lead">
+      Escríbenos para eventos privados, catas guiadas, suscripciones de grano o consultas generales.
+    </p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container contact-layout">
+    <div class="luxury-card form-card">
+      <h2 id="contact-form-title" class="form-title">Envíanos un mensaje</h2>
+
+      @if (successMessage(); as msg) {
+        <div class="toast-banner is-success" role="status" aria-live="polite">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <div>
+            <strong>Mensaje enviado</strong>
+            <p>{{ msg }}</p>
+          </div>
+        </div>
+      }
+
+      @if (errorMessage(); as errMsg) {
+        <div class="toast-banner is-error" role="alert">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" x2="12" y1="8" y2="12"/>
+            <line x1="12" x2="12.01" y1="16" y2="16"/>
+          </svg>
+          <div>
+            <strong>No se pudo enviar</strong>
+            <p>{{ errMsg }}</p>
+          </div>
+        </div>
+      }
+
+      <form
+        #contactFormEl
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        aria-labelledby="contact-form-title"
+        novalidate
+      >
+        <div class="field-group">
+          <label for="contacto-nombre">
+            Nombre completo <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span id="nombre-hint" class="field-hint">Mínimo 2 caracteres.</span>
+          <input
+            id="contacto-nombre"
+            type="text"
+            name="nombre"
+            formControlName="nombre"
+            autocomplete="name"
+            minlength="2"
+            required
+            [class.is-invalid]="isFieldInvalid('nombre')"
+            [attr.aria-invalid]="isFieldInvalid('nombre') ? 'true' : 'false'"
+            [attr.aria-describedby]="describedBy('nombre-hint', 'nombre-error', 'nombre')"
+          >
+          @if (isFieldInvalid('nombre')) {
+            <p id="nombre-error" class="error-msg">
+              Error: Ingresa tu nombre completo (al menos 2 caracteres).
+            </p>
+          }
+        </div>
+
+        <div class="fields-pair">
+          <div class="field-group">
+            <label for="contacto-email">
+              Correo electrónico <span class="req-mark" aria-hidden="true">*</span>
+            </label>
+            <span id="email-hint" class="field-hint">Formato: nombre&#64;correo.com</span>
+            <input
+              id="contacto-email"
+              type="email"
+              name="email"
+              formControlName="email"
+              autocomplete="email"
+              inputmode="email"
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+              required
+              [class.is-invalid]="isFieldInvalid('email')"
+              [attr.aria-invalid]="isFieldInvalid('email') ? 'true' : 'false'"
+              [attr.aria-describedby]="describedBy('email-hint', 'email-error', 'email')"
+            >
+            @if (isFieldInvalid('email')) {
+              <p id="email-error" class="error-msg">
+                Error: Ingresa un correo electrónico válido (ejemplo: tu&#64;correo.com).
+              </p>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="contacto-telefono">Teléfono (opcional)</label>
+            <span id="telefono-hint" class="field-hint">Ejemplo: +591 700-00000</span>
+            <input
+              id="contacto-telefono"
+              type="tel"
+              name="telefono"
+              formControlName="telefono"
+              autocomplete="tel"
+              inputmode="tel"
+              aria-invalid="false"
+              aria-describedby="telefono-hint"
+            >
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="contacto-asunto">
+            Asunto <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span id="asunto-hint" class="field-hint">Ej. Reserva de cata, Barra para eventos, Consulta.</span>
+          <input
+            id="contacto-asunto"
+            type="text"
+            name="asunto"
+            formControlName="asunto"
+            minlength="3"
+            required
+            [class.is-invalid]="isFieldInvalid('asunto')"
+            [attr.aria-invalid]="isFieldInvalid('asunto') ? 'true' : 'false'"
+            [attr.aria-describedby]="describedBy('asunto-hint', 'asunto-error', 'asunto')"
+          >
+          @if (isFieldInvalid('asunto')) {
+            <p id="asunto-error" class="error-msg">
+              Error: Indica el motivo de tu contacto (mínimo 3 caracteres).
+            </p>
+          }
+        </div>
+
+        <div class="field-group">
+          <label for="contacto-mensaje">
+            Mensaje <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span id="mensaje-hint" class="field-hint">Cuéntanos los detalles (mínimo 10 caracteres).</span>
+          <textarea
+            id="contacto-mensaje"
+            name="mensaje"
+            rows="5"
+            formControlName="mensaje"
+            minlength="10"
+            required
+            [class.is-invalid]="isFieldInvalid('mensaje')"
+            [attr.aria-invalid]="isFieldInvalid('mensaje') ? 'true' : 'false'"
+            [attr.aria-describedby]="describedBy('mensaje-hint', 'mensaje-error', 'mensaje')"
+          ></textarea>
+          @if (isFieldInvalid('mensaje')) {
+            <p id="mensaje-error" class="error-msg">
+              Error: Escribe un mensaje de al menos 10 caracteres.
+            </p>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-espresso submit-btn" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span>Enviando mensaje...</span>
+          } @else {
+            <span>Enviar Mensaje</span>
+            <span aria-hidden="true">→</span>
+          }
+        </button>
+      </form>
+    </div>
+
+    @if (nosotros(); as info) {
+      <aside class="luxury-card info-aside" aria-labelledby="datos-directos-heading">
+        <span class="page-eyebrow">Contacto Directo</span>
+        <h2 id="datos-directos-heading" class="aside-title">{{ info.nombre_cafeteria }}</h2>
+        <p class="aside-slogan">{{ info.eslogan }}</p>
+
+        <dl class="aside-list">
+          <div>
+            <dt>Dirección</dt>
+            <dd>{{ info.direccion }} — {{ info.ciudad }}</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd><a [href]="'tel:' + info.telefono">{{ info.telefono }}</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a [href]="'mailto:' + info.email">{{ info.email }}</a></dd>
+          </div>
+          <div>
+            <dt>Horarios</dt>
+            <dd>{{ info.horario_atencion }}</dd>
+          </div>
+        </dl>
+      </aside>
+    }
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<article class="luxury-card specialty-card">
+  <div class="card-media">
+    <img
+      [src]="producto.imagen_url"
+      [alt]="producto.nombre"
+      width="800"
+      height="500"
+      [attr.loading]="eagerImage ? 'eager' : 'lazy'"
+    >
+    <span class="category-pill badge-overlay">{{ producto.categoria }}</span>
+  </div>
+
+  <div class="specialty-body">
+    <div class="specialty-top">
+      <div>
+        <h3 class="specialty-title">{{ producto.nombre }}</h3>
+        @if (producto.tamanio) {
+          <p class="specialty-size">{{ producto.tamanio }}</p>
+        }
+      </div>
+      <span class="price-tag specialty-price">{{ precioFormateado }}</span>
+    </div>
+
+    <p class="specialty-desc">{{ producto.descripcion }}</p>
+
+    @if (notas.length > 0) {
+      <div class="tasting-block">
+        <span class="tasting-label">Notas de cata</span>
+        <ul class="notes-list" aria-label="Notas de cata">
+          @for (nota of notas; track nota) {
+            <li class="note-chip">{{ nota }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</article>

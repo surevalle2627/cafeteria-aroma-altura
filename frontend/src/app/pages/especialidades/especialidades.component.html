@@ -1,0 +1,32 @@
+<section class="page-header">
+  <div class="container">
+    <span class="page-eyebrow">Creaciones de Autor</span>
+    <h1 class="page-title">Especialidades</h1>
+    <p class="page-lead">
+      Extracciones de precisión, lotes seleccionados de altura y perfiles sensoriales únicos.
+    </p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    @if (loading()) {
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    } @else if (error()) {
+      <div class="state-panel" role="alert">
+        <p>{{ error() }}</p>
+        <button type="button" class="btn btn-espresso" (click)="cargarEspecialidades(true)">Reintentar</button>
+      </div>
+    } @else {
+      <div class="cards-grid">
+        @for (item of especialidades(); track item.id; let idx = $index) {
+          <app-especialidad-card [producto]="item" [eagerImage]="idx < 3" />
+        }
+      </div>
+    }
+  </div>
+</section>

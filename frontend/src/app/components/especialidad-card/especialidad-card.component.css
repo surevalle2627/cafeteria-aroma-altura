@@ -1,0 +1,68 @@
+.specialty-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  block-size: 100%;
+}
+
+.badge-overlay {
+  position: absolute;
+  inset-block-start: 0.9rem;
+  inset-inline-start: 0.9rem;
+}
+
+.specialty-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  padding: 1.4rem;
+}
+
+.specialty-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.specialty-title {
+  font-size: 1.32rem;
+  line-height: 1.25;
+}
+
+.specialty-size {
+  margin-block-start: 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-copper-text);
+  letter-spacing: 0.03em;
+}
+
+.specialty-price {
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-cream);
+  border: 1px solid rgb(200 138 75 / 0.35);
+  font-size: 1.02rem;
+}
+
+.specialty-desc {
+  font-size: 0.94rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.tasting-block {
+  margin-block-start: auto;
+  padding-block-start: 0.85rem;
+  border-block-start: 1px solid var(--border-subtle);
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tasting-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+}

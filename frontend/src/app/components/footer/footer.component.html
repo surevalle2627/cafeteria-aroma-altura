@@ -1,0 +1,66 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      @if (nosotros(); as info) {
+        <h2 class="footer-title">{{ info.nombre_cafeteria }}</h2>
+        <p class="footer-slogan">{{ info.eslogan }}</p>
+        <p class="footer-meta">{{ info.ciudad }}</p>
+      } @else {
+        <div class="footer-skeleton"></div>
+      }
+    </div>
+
+    <div class="footer-nav">
+      <h3 class="footer-heading">Explorar</h3>
+      <ul>
+        @for (link of navLinks; track link.path) {
+          <li>
+            <a [routerLink]="link.path">{{ link.label }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h3 class="footer-heading">Visítanos</h3>
+      @if (nosotros(); as info) {
+        <dl class="contact-details">
+          <div>
+            <dt class="visually-hidden">Dirección</dt>
+            <dd>{{ info.direccion }}</dd>
+          </div>
+          <div>
+            <dt class="visually-hidden">Horario</dt>
+            <dd>{{ info.horario_atencion }}</dd>
+          </div>
+          <div>
+            <dt class="visually-hidden">Teléfono</dt>
+            <dd><a [href]="'tel:' + info.telefono">{{ info.telefono }}</a></dd>
+          </div>
+          <div>
+            <dt class="visually-hidden">Correo electrónico</dt>
+            <dd><a [href]="'mailto:' + info.email">{{ info.email }}</a></dd>
+          </div>
+        </dl>
+        @if (info.mapa_url) {
+          <a
+            class="footer-map-link"
+            [href]="info.mapa_url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver ubicación en mapa
+            <span aria-hidden="true">→</span>
+          </a>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    @if (nosotros(); as info) {
+      <p>© {{ currentYear }} {{ info.nombre_cafeteria }}</p>
+      <p>{{ info.ciudad }}</p>
+    }
+  </div>
+</footer>

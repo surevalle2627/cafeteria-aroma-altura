@@ -1,0 +1,122 @@
+<section class="page-header">
+  <div class="container">
+    <span class="page-eyebrow">Menú Completo</span>
+    <h1 class="page-title">Carta &amp; Precios</h1>
+    <p class="page-lead">
+      Filtra por categoría o busca por grano, método de extracción o nota sensorial.
+    </p>
+  </div>
+</section>
+
+<section class="page-section">
+  <div class="container">
+    @if (loading()) {
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    } @else if (error()) {
+      <div class="state-panel" role="alert">
+        <p>{{ error() }}</p>
+        <button type="button" class="btn btn-espresso" (click)="cargarProductos(true)">Reintentar</button>
+      </div>
+    } @else {
+      <div class="controls-bar">
+        <div class="search-wrap" role="search">
+          <form (submit)="$event.preventDefault()" class="search-form">
+            <label for="carta-search" class="visually-hidden">Buscar en la carta</label>
+            <svg class="search-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input
+              id="carta-search"
+              type="search"
+              name="q"
+              class="search-input"
+              placeholder="Buscar café, método, pastel o nota..."
+              autocorrect="off"
+              autocapitalize="none"
+              spellcheck="false"
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+            >
+          </form>
+        </div>
+
+        <div class="filter-pills" role="group" aria-label="Filtrar carta por categoría">
+          @for (cat of categorias(); track cat) {
+            <button
+              type="button"
+              class="filter-btn"
+              [class.is-selected]="selectedCategoria() === cat"
+              [attr.aria-pressed]="selectedCategoria() === cat"
+              (click)="selectCategoria(cat)"
+            >
+              <span>{{ cat }}</span>
+              <span class="filter-count">{{ contarPorCategoria(cat) }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <p class="results-summary" aria-live="polite">
+        Mostrando {{ productosFiltrados().length }} de {{ productos().length }} opciones disponibles
+      </p>
+
+      @if (productosFiltrados().length === 0) {
+        <div class="state-panel">
+          <p>No encontramos productos que coincidan con tu búsqueda actual.</p>
+          <button type="button" class="btn btn-outline" (click)="limpiarFiltros()">
+            Mostrar toda la carta
+          </button>
+        </div>
+      } @else {
+        <div class="menu-grid">
+          @for (item of productosFiltrados(); track item.id) {
+            <article class="luxury-card menu-item-card">
+              <div class="menu-thumb">
+                <img
+                  [src]="item.imagen_url"
+                  [alt]="item.nombre"
+                  width="320"
+                  height="320"
+                  loading="lazy"
+                >
+                @if (item.es_especialidad === 1) {
+                  <span class="specialty-ribbon">Especialidad</span>
+                }
+              </div>
+
+              <div class="menu-content">
+                <div class="menu-header">
+                  <div>
+                    <span class="menu-cat">{{ item.categoria }}</span>
+                    <h2 class="menu-name">{{ item.nombre }}</h2>
+                  </div>
+                  <div class="menu-price-wrap">
+                    <span class="price-tag menu-price">{{ precioDe(item) }}</span>
+                    @if (item.tamanio) {
+                      <span class="menu-size">{{ item.tamanio }}</span>
+                    }
+                  </div>
+                </div>
+
+                <p class="menu-desc">{{ item.descripcion }}</p>
+
+                @if (notasDe(item).length > 0) {
+                  <ul class="notes-list" aria-label="Notas de cata">
+                    @for (nota of notasDe(item); track nota) {
+                      <li class="note-chip">{{ nota }}</li>
+                    }
+                  </ul>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
+    }
+  </div>
+</section>

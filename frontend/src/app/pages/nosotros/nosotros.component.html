@@ -1,0 +1,166 @@
+@if (loading()) {
+  <section class="page-header">
+    <div class="container">
+      <div class="hero-skeleton"></div>
+    </div>
+  </section>
+  <section class="page-section">
+    <div class="container skeleton-grid">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  </section>
+} @else if (error()) {
+  <section class="page-header">
+    <div class="container">
+      <span class="page-eyebrow">Nuestra Casa</span>
+      <h1 class="page-title">Sobre Nosotros</h1>
+    </div>
+  </section>
+  <section class="page-section">
+    <div class="container">
+      <div class="state-panel" role="alert">
+        <p>{{ error() }}</p>
+        <button type="button" class="btn btn-espresso" (click)="cargarNosotros(true)">Reintentar</button>
+      </div>
+    </div>
+  </section>
+} @else {
+  @if (nosotros(); as info) {
+    <section class="page-header">
+    <div class="container">
+      <span class="page-eyebrow">Identidad y Origen</span>
+      <h1 class="page-title">{{ info.nombre_cafeteria }}</h1>
+      <p class="page-lead slogan-quote">“{{ info.eslogan }}”</p>
+    </div>
+  </section>
+
+  <section class="page-section" aria-labelledby="historia-heading">
+    <div class="container story-layout">
+      <div class="story-main">
+        <h2 id="historia-heading" class="section-heading">Nuestra Historia</h2>
+        <p class="story-text">{{ info.historia }}</p>
+
+        <div class="mission-vision-grid">
+          <article class="luxury-card mv-card">
+            <span class="mv-tag">Propósito</span>
+            <h3>Misión</h3>
+            <p>{{ info.mision }}</p>
+          </article>
+
+          <article class="luxury-card mv-card">
+            <span class="mv-tag">Horizonte</span>
+            <h3>Visión</h3>
+            <p>{{ info.vision }}</p>
+          </article>
+        </div>
+      </div>
+
+      <aside class="luxury-card location-card" aria-labelledby="ubicacion-heading">
+        <h2 id="ubicacion-heading" class="location-title">Encuéntranos</h2>
+        <dl class="location-list">
+          <div>
+            <dt>Dirección</dt>
+            <dd>{{ info.direccion }}</dd>
+          </div>
+          <div>
+            <dt>Ciudad</dt>
+            <dd>{{ info.ciudad }}</dd>
+          </div>
+          <div>
+            <dt>Horario de Atención</dt>
+            <dd>{{ info.horario_atencion }}</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd><a [href]="'tel:' + info.telefono">{{ info.telefono }}</a></dd>
+          </div>
+          <div>
+            <dt>Correo Electrónico</dt>
+            <dd><a [href]="'mailto:' + info.email">{{ info.email }}</a></dd>
+          </div>
+        </dl>
+
+        @if (info.mapa_url) {
+          <a
+            class="btn btn-espresso location-btn"
+            [href]="info.mapa_url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir en Mapa
+            <span aria-hidden="true">→</span>
+          </a>
+        }
+      </aside>
+    </div>
+  </section>
+
+  <section class="page-section gallery-section" aria-labelledby="galeria-heading">
+    <div class="container">
+      <header class="gallery-header">
+        <span class="page-eyebrow">Espacios de la Tienda</span>
+        <h2 id="galeria-heading" class="section-heading">Galería de Nuestra Barra</h2>
+      </header>
+
+      <div class="gallery-grid">
+        @for (foto of galeria(); track foto.id) {
+          <figure class="luxury-card gallery-card">
+            <button
+              type="button"
+              class="gallery-trigger"
+              [attr.aria-label]="'Ampliar fotografía: ' + foto.titulo"
+              (click)="openPhoto(foto)"
+            >
+              <div class="card-media">
+                <img
+                  [src]="foto.imagen_url"
+                  [alt]="foto.titulo"
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                >
+              </div>
+            </button>
+            <figcaption class="gallery-caption">
+              <h3>{{ foto.titulo }}</h3>
+              <p>{{ foto.descripcion }}</p>
+            </figcaption>
+          </figure>
+        }
+      </div>
+    </div>
+  </section>
+  }
+}
+
+<dialog
+  #galleryDialog
+  class="lightbox-dialog"
+  closedby="any"
+  aria-labelledby="lightbox-title"
+  (close)="selectedPhoto.set(null)"
+  (pointerdown)="onDialogPointerDown($event)"
+  (pointerup)="onDialogPointerUp($event)"
+>
+  @if (selectedPhoto(); as photo) {
+    <div class="lightbox-inner">
+      <div class="lightbox-head">
+        <h2 id="lightbox-title">{{ photo.titulo }}</h2>
+        <button
+          type="button"
+          class="lightbox-close"
+          aria-label="Cerrar vista ampliada"
+          autofocus
+          (click)="closePhoto()"
+        >
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <img [src]="photo.imagen_url" [alt]="photo.titulo" class="lightbox-img">
+      <p class="lightbox-desc">{{ photo.descripcion }}</p>
+    </div>
+  }
+</dialog>

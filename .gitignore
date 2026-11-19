@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+*/node_modules/
+
+# Entorno y credenciales
+.env
+backend/.env
+*.env.local
+
+# Builds y temporales Angular
+dist/
+frontend/dist/
+.angular/
+frontend/.angular/
+tmp/
+out-tsc/
+bazel-out/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo y editores
+.DS_Store
+*/.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

@@ -1,0 +1,108 @@
+<section class="hero-section" aria-label="Portada principal">
+  @if (inicio(); as hero) {
+    <video
+      #heroVideo
+      class="hero-video"
+      [src]="videoSrc()"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="auto"
+      [muted]="true"
+      [autoplay]="true"
+      [loop]="true"
+      [playsInline]="true"
+      aria-hidden="true"
+      (canplay)="onVideoCanPlay($event)"
+      (error)="onVideoError()"
+    ></video>
+
+    <div class="hero-scrim" aria-hidden="true"></div>
+
+    <div class="container hero-content">
+      <p class="hero-subtitle">{{ hero.subtitulo }}</p>
+      <h1 class="hero-title">{{ hero.titulo_hero }}</h1>
+      <p class="hero-description">{{ hero.descripcion }}</p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" [routerLink]="hero.ruta_boton || '/especialidades'">
+          <span>{{ hero.texto_boton }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn hero-secondary-btn" routerLink="/precios">
+          <span>Ver Carta Completa</span>
+        </a>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="video-control-btn"
+      [attr.aria-label]="videoPaused() ? 'Reanudar video de fondo' : 'Pausar video de fondo'"
+      (click)="toggleVideoPlayback()"
+    >
+      @if (videoPaused()) {
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="6 4 20 12 6 20 6 4"/>
+        </svg>
+        <span>Reanudar</span>
+      } @else {
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+        <span>Pausar</span>
+      }
+    </button>
+  } @else if (loading()) {
+    <div class="hero-scrim hero-loading-bg" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <div class="hero-skeleton-line short"></div>
+      <div class="hero-skeleton-line title"></div>
+      <div class="hero-skeleton-line body"></div>
+    </div>
+  } @else if (error()) {
+    <div class="hero-scrim hero-loading-bg" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <p class="hero-description">{{ error() }}</p>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-primary" (click)="cargarDatos(true)">Reintentar</button>
+      </div>
+    </div>
+  }
+</section>
+
+<section class="page-section featured-section" aria-labelledby="featured-heading">
+  <div class="container">
+    <header class="section-header">
+      <div>
+        <span class="page-eyebrow">Selección del Barista</span>
+        <h2 id="featured-heading" class="section-title">Especialidades Destacadas</h2>
+      </div>
+      <a class="btn btn-outline" routerLink="/especialidades">
+        Explorar todas
+        <span aria-hidden="true">→</span>
+      </a>
+    </header>
+
+    @if (loading()) {
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    } @else if (error()) {
+      <div class="state-panel" role="alert">
+        <p>{{ error() }}</p>
+        <button type="button" class="btn btn-espresso" (click)="cargarDatos(true)">Reintentar</button>
+      </div>
+    } @else {
+      <div class="cards-grid">
+        @for (item of especialidades(); track item.id; let idx = $index) {
+          <app-especialidad-card [producto]="item" [eagerImage]="idx < 3" />
+        }
+      </div>
+    }
+  </div>
+</section>
